@@ -1,0 +1,5 @@
+*.swp
+libthreadpool.a
+test/test
+example/example
+doc/html/*
