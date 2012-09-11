@@ -21,6 +21,11 @@
 #define TPTHREAD_STOP_SIGNAL SIGRTMAX-5
 #define TPTHREAD_STACK_SIZE 	2097152
 
+#ifdef __x86_64__
+    #define P_INT_64_T ld
+#else
+    #define P_INT64_T lld
+#endif
 
 #ifndef TPBOOL
 typedef int TPBOOL;
