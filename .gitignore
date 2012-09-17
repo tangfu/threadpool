@@ -4,3 +4,4 @@ test/test
 example/example
 doc/html/*
 build
+*.orig

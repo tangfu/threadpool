@@ -20,7 +20,7 @@
 #endif
 
 struct list_head {
-        struct list_head *next, *prev;
+    struct list_head *next, *prev;
 };
 
 #define LIST_HEAD_INIT(name) { &(name), &(name) }
@@ -28,123 +28,124 @@ struct list_head {
 #define LIST_HEAD(name) \
         struct list_head name = LIST_HEAD_INIT(name)
 
-static forceinline void INIT_LIST_HEAD( struct list_head *list )
+static forceinline void INIT_LIST_HEAD(struct list_head *list)
 {
-        list->next = list;
-        list->prev = list;
+    list->next = list;
+    list->prev = list;
 }
 
-static forceinline void __list_add( struct list_head *new,
-                                    struct list_head *prev,
-                                    struct list_head *next )
+static forceinline void __list_add(struct list_head *new,
+                                   struct list_head *prev,
+                                   struct list_head *next)
 {
-        next->prev = new;
-        new->next = next;
-        new->prev = prev;
-        prev->next = new;
+    next->prev = new;
+    new->next = next;
+    new->prev = prev;
+    prev->next = new;
 }
 
 
-static forceinline void list_add( struct list_head *new, struct list_head *head )
+static forceinline void list_add(struct list_head *new, struct list_head *head)
 {
-        __list_add( new, head, head->next );
+    __list_add(new, head, head->next);
 }
 
-static forceinline void list_add_tail( struct list_head *new, struct list_head *head )
+static forceinline void list_add_tail(struct list_head *new, struct list_head *head)
 {
-        __list_add( new, head->prev, head );
+    __list_add(new, head->prev, head);
 }
 
-static forceinline void __list_del( struct list_head * prev, struct list_head * next )
+static forceinline void __list_del(struct list_head *prev, struct list_head *next)
 {
-        next->prev = prev;
-        prev->next = next;
+    next->prev = prev;
+    prev->next = next;
 }
 
-static forceinline void list_del( struct list_head *entry )
+static forceinline void list_del(struct list_head *entry)
 {
-        __list_del( entry->prev, entry->next );
-        entry->next = LIST_POISON1;
-        entry->prev = LIST_POISON2;
+    __list_del(entry->prev, entry->next);
+    entry->next = LIST_POISON1;
+    entry->prev = LIST_POISON2;
 }
 
-static forceinline void list_replace( struct list_head *old,
-                                      struct list_head *new )
+static forceinline void list_replace(struct list_head *old,
+                                     struct list_head *new)
 {
-        new->next = old->next;
-        new->next->prev = new;
-        new->prev = old->prev;
-        new->prev->next = new;
+    new->next = old->next;
+    new->next->prev = new;
+    new->prev = old->prev;
+    new->prev->next = new;
 }
 
-static forceinline void list_replace_init( struct list_head *old,
-                                           struct list_head *new )
+static forceinline void list_replace_init(struct list_head *old,
+                                          struct list_head *new)
 {
-        list_replace( old, new );
-        INIT_LIST_HEAD( old );
+    list_replace(old, new);
+    INIT_LIST_HEAD(old);
 }
 
-static forceinline void list_del_init( struct list_head *entry )
+static forceinline void list_del_init(struct list_head *entry)
 {
-        __list_del( entry->prev, entry->next );
-        INIT_LIST_HEAD( entry );
+    __list_del(entry->prev, entry->next);
+    INIT_LIST_HEAD(entry);
 }
 
-static forceinline void list_move( struct list_head *list, struct list_head *head )
+static forceinline void list_move(struct list_head *list, struct list_head *head)
 {
-        __list_del( list->prev, list->next );
-        list_add( list, head );
+    __list_del(list->prev, list->next);
+    list_add(list, head);
 }
 
-static forceinline void list_move_tail( struct list_head *list,
-                                        struct list_head *head )
+static forceinline void list_move_tail(struct list_head *list,
+                                       struct list_head *head)
 {
-        __list_del( list->prev, list->next );
-        list_add_tail( list, head );
+    __list_del(list->prev, list->next);
+    list_add_tail(list, head);
 }
 
-static forceinline int list_is_last( const struct list_head *list,
-                                     const struct list_head *head )
+static forceinline int list_is_last(const struct list_head *list,
+                                    const struct list_head *head)
 {
-        return list->next == head;
+    return list->next == head;
 }
 
-static forceinline int list_empty( const struct list_head *head )
+static forceinline int list_empty(const struct list_head *head)
 {
-        return head->next == head;
+    return head->next == head;
 }
 
-static forceinline int list_empty_careful( const struct list_head *head )
+static forceinline int list_empty_careful(const struct list_head *head)
 {
-        struct list_head *next = head->next;
-        return ( next == head ) && ( next == head->prev );
+    struct list_head *next = head->next;
+    return (next == head) && (next == head->prev);
 }
 
-static forceinline void __list_splice( struct list_head *list,
-                                       struct list_head *head )
+static forceinline void __list_splice(struct list_head *list,
+                                      struct list_head *head)
 {
-        struct list_head *first = list->next;
-        struct list_head *last = list->prev;
-        struct list_head *at = head->next;
-        first->prev = head;
-        head->next = first;
-        last->next = at;
-        at->prev = last;
+    struct list_head *first = list->next;
+    struct list_head *last = list->prev;
+    struct list_head *at = head->next;
+    first->prev = head;
+    head->next = first;
+    last->next = at;
+    at->prev = last;
 }
 
-static forceinline void list_splice( struct list_head *list, struct list_head *head )
+static forceinline void list_splice(struct list_head *list, struct list_head *head)
 {
-        if( !list_empty( list ) )
-                __list_splice( list, head );
+    if(!list_empty(list)) {
+        __list_splice(list, head);
+    }
 }
 
-static forceinline void list_splice_init( struct list_head *list,
-                                          struct list_head *head )
+static forceinline void list_splice_init(struct list_head *list,
+                                         struct list_head *head)
 {
-        if( !list_empty( list ) ) {
-                __list_splice( list, head );
-                INIT_LIST_HEAD( list );
-        }
+    if(!list_empty(list)) {
+        __list_splice(list, head);
+        INIT_LIST_HEAD(list);
+    }
 }
 
 #define list_entry(ptr, type, member) \
