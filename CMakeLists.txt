@@ -6,6 +6,6 @@ add_definitions("-g -Wall")
 add_subdirectory(src)
 
 
-export(PACKAGE threadpool)
+export(PACKAGE mylib)
 export(TARGETS threadpool FILE threadpool-exports.cmake)
 configure_file(threadpool-config.cmake.in ${CMAKE_BINARY_DIR}/threadpool-config.cmake)
